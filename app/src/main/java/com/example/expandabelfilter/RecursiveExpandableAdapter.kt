@@ -11,7 +11,6 @@ import com.example.expandabelfilter.RecursiveExpandableAdapter.RowViewHolder
 import com.example.expandabelfilter.databinding.RowBinding
 import com.example.expandabelfilter.model.ExpandableRow
 import com.example.expandabelfilter.model.createList
-import kotlin.math.sign
 
 class RecursiveExpandableAdapter<T>(
     data: List<T>,
@@ -78,17 +77,14 @@ class RecursiveExpandableAdapter<T>(
         val position = rows.indexOf(row)
         rows[position] = row.copy(expanded = false)
 
-        var child = rows[position + 1]
+        val nextPosition = position + 1
         var noOfItemsRemoved = 0
 
-        while (child.level > row.level) {
-            rows.removeAt(position + 1)
-            if (position + 1 < rows.size) {
-                child = rows[position + 1]
-                noOfItemsRemoved++
-            } else {
-                break
-            }
+        // Iterate and remove while lower level (numerically higher) elements ar found
+        while (rows[nextPosition].level > row.level) {
+            rows.removeAt(nextPosition)
+            noOfItemsRemoved++
+            if (nextPosition > rows.lastIndex) break
         }
 
         notifyItemChanged(position)

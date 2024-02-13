@@ -22,6 +22,7 @@ class MainActivity : AppCompatActivity() {
             childrenExtractor = { it.children }
         )
 
+        // Disable animation due to internal bug causing crash
         recyclerView.layoutManager =
             object : LinearLayoutManager(this, RecyclerView.VERTICAL, false) {
                 override fun supportsPredictiveItemAnimations() = false
