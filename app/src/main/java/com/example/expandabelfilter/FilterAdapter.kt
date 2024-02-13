@@ -36,7 +36,8 @@ class FilterAdapter(private val context: Context, var rowModels: MutableList<Row
 
 
     override fun onBindViewHolder(p0: RecyclerView.ViewHolder, p1: Int) {
-        if (p1 >= 3) return
+
+
         val row = rowModels[p1]
 
         (p0 as CountryViewHolder).nameTv.text = row.filters.get(p1).name
