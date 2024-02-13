@@ -4,21 +4,23 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.expandabelfilter.model.JsonHelper
-
+import com.example.expandabelfilter.model.Row
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var filterAdapter: FilterAdapter
-    lateinit var recyclerView : RecyclerView
-    private val filterRows : MutableList<RowModelForFilter> = mutableListOf()
+    private lateinit var adapter: RecursiveExpandableAdapter<Row>
+    private lateinit var recyclerView : RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         recyclerView = findViewById(R.id.recycler_view)
-        filterAdapter = FilterAdapter(this, filterRows)
+        adapter = RecursiveExpandableAdapter(
+            data = DataHelper.getData(),
+            labelExtractor = { it.name },
+            childrenExtractor = { it.children }
+        )
 
         recyclerView.layoutManager = LinearLayoutManager(
             this,
@@ -26,20 +28,6 @@ class MainActivity : AppCompatActivity() {
             false
         )
 
-        recyclerView.adapter = filterAdapter
-
-        populateData()
-    }
-
-
-    private fun populateData(){
-
-
-        val filters = JsonHelper().filterJsonArray
-
-        filterRows.add(RowModelForFilter(1, filters = filters))
-        filterAdapter.notifyItemInserted(filterRows.size)
-
-
+        recyclerView.adapter = adapter
     }
 }
