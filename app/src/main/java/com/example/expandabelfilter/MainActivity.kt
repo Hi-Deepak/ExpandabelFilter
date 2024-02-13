@@ -22,11 +22,10 @@ class MainActivity : AppCompatActivity() {
             childrenExtractor = { it.children }
         )
 
-        recyclerView.layoutManager = LinearLayoutManager(
-            this,
-            RecyclerView.VERTICAL,
-            false
-        )
+        recyclerView.layoutManager =
+            object : LinearLayoutManager(this, RecyclerView.VERTICAL, false) {
+                override fun supportsPredictiveItemAnimations() = false
+            }
 
         recyclerView.adapter = adapter
     }
