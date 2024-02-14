@@ -1,45 +1,55 @@
 package com.example.expandabelfilter
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.expandabelfilter.model.JsonHelper
-
+import com.example.expandabelfilter.model.Filter
+import com.example.expandabelfilter.model.Row
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var filterAdapter: FilterAdapter
-    lateinit var recyclerView : RecyclerView
-    private val filterRows : MutableList<RowModelForFilter> = mutableListOf()
+    // Dummy data adapter
+//    private lateinit var adapter: RecursiveExpandableAdapter<Row>
+
+    // Main data adapter
+    private lateinit var adapter: RecursiveExpandableAdapter<Filter>
+
+    private lateinit var recyclerView : RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         recyclerView = findViewById(R.id.recycler_view)
-        filterAdapter = FilterAdapter(this, filterRows)
 
-        recyclerView.layoutManager = LinearLayoutManager(
-            this,
-            RecyclerView.VERTICAL,
-            false
+        // Dummy data
+//        adapter = RecursiveExpandableAdapter(
+//            data = DataHelper.getData(),
+//            labelExtractor = { it.name },
+//            childrenExtractor = { it.children },
+//            onClick = {
+//                Toast.makeText(this, it.name, Toast.LENGTH_SHORT).show()
+//            }
+//        )
+
+        // Main data
+        adapter = RecursiveExpandableAdapter(
+            data = DataHelper.getMainData(),
+            labelExtractor = { it.name ?: it.value },
+            childrenExtractor = { it.options ?: it.child ?: emptyList() },
+            onClick = {
+                Toast.makeText(this, it.name ?: it.value, Toast.LENGTH_SHORT).show()
+            }
         )
 
-        recyclerView.adapter = filterAdapter
+        // Disable animation due to internal bug causing crash
+        recyclerView.layoutManager =
+            object : LinearLayoutManager(this, RecyclerView.VERTICAL, false) {
+                override fun supportsPredictiveItemAnimations() = false
+            }
 
-        populateData()
-    }
-
-
-    private fun populateData(){
-
-
-        val filters = JsonHelper().filterJsonArray
-
-        filterRows.add(RowModelForFilter(1, filters = filters))
-        filterAdapter.notifyItemInserted(filterRows.size)
-
-
+        recyclerView.adapter = adapter
     }
 }

@@ -1,12 +1,105 @@
-package com.example.filterdemo
+package com.example.expandabelfilter
 
-import com.example.expandabelfilter.model.Filters
+import com.example.expandabelfilter.model.Filter
+import com.example.expandabelfilter.model.Row
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
-class JsonHelper {
+object DataHelper {
 
-    val json = """
+    fun getData(): List<Row> {
+        return listOf(
+            Row(
+                name = "A",
+                children = listOf(
+                    Row(
+                        name = "A1",
+                        children = listOf(
+                            Row(
+                                name = "A1.1",
+                                children = listOf(
+                                    Row("A1.1.1"),
+                                    Row("A1.1.2")
+                                )
+                            ),
+                            Row(
+                                name = "A1.2",
+                                children = listOf(
+                                    Row("A1.2.1"),
+                                    Row("A1.2.2")
+                                )
+                            )
+                        )
+                    ),
+                    Row(
+                        name = "A2",
+                        children = listOf(
+                            Row(
+                                name = "A2.1",
+                                children = listOf(
+                                    Row("A2.1.1"),
+                                    Row("A2.1.2")
+                                )
+                            ),
+                            Row(
+                                name = "A2.2",
+                                children = listOf(
+                                    Row("A2.2.1"),
+                                    Row("A2.2.2")
+                                )
+                            )
+                        )
+                    )
+                )
+            ),
+            Row(
+                name = "B",
+                children = listOf(
+                    Row(
+                        name = "B1",
+                        children = listOf(
+                            Row(
+                                name = "B1.1",
+                                children = listOf(
+                                    Row("B1.1.1"),
+                                    Row("B1.1.2")
+                                )
+                            ),
+                            Row(
+                                name = "B1.2",
+                                children = listOf(
+                                    Row("B1.2.1"),
+                                    Row("B1.2.2")
+                                )
+                            )
+                        )
+                    ),
+                    Row(
+                        name = "B2",
+                        children = listOf(
+                            Row(
+                                name = "B2.1",
+                                children = listOf(
+                                    Row("B2.1.1"),
+                                    Row("B2.1.2")
+                                )
+                            ),
+                            Row(
+                                name = "B2.2",
+                                children = listOf(
+                                    Row("B2.2.1"),
+                                    Row("B2.2.2")
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        )
+    }
+
+    fun getMainData(): List<Filter> {
+        val json = """
         [
           {
             "key": "brand",
@@ -761,8 +854,7 @@ class JsonHelper {
         ]
     """.trimIndent()
 
-    val typeToken = object : TypeToken<Filters>() {}.type
-
-    val filterJsonArray = Gson().fromJson<Filters>(json, typeToken)
+        return Gson().fromJson(json, object : TypeToken<List<Filter>>() {}.type)
+    }
 
 }
