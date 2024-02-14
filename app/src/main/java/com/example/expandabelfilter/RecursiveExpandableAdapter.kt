@@ -58,9 +58,9 @@ class RecursiveExpandableAdapter<T>(
                 }
             )
 
-        holder.b.toggleBtn.setOnClickListener {
-            if (row.expanded) collapse(row) else expand(row)
-        }
+        val onClick = { if (row.expanded) collapse(row) else expand(row) }
+        holder.b.toggleBtn.setOnClickListener { onClick() }
+        holder.itemView.setOnClickListener { onClick() }
     }
 
     private fun expand(row: ExpandableRow<T>) {
