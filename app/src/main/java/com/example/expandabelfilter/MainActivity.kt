@@ -1,6 +1,7 @@
 package com.example.expandabelfilter
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -27,14 +28,20 @@ class MainActivity : AppCompatActivity() {
 //        adapter = RecursiveExpandableAdapter(
 //            data = DataHelper.getData(),
 //            labelExtractor = { it.name },
-//            childrenExtractor = { it.children }
+//            childrenExtractor = { it.children },
+//            onClick = {
+//                Toast.makeText(this, it.name, Toast.LENGTH_SHORT).show()
+//            }
 //        )
 
         // Main data
         adapter = RecursiveExpandableAdapter(
             data = DataHelper.getMainData(),
             labelExtractor = { it.name ?: it.value },
-            childrenExtractor = { it.options ?: it.child ?: emptyList() }
+            childrenExtractor = { it.options ?: it.child ?: emptyList() },
+            onClick = {
+                Toast.makeText(this, it.name ?: it.value, Toast.LENGTH_SHORT).show()
+            }
         )
 
         // Disable animation due to internal bug causing crash

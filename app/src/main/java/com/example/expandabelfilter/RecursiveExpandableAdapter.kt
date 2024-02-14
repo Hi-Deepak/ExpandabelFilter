@@ -15,7 +15,8 @@ import com.example.expandabelfilter.model.createList
 class RecursiveExpandableAdapter<T>(
     data: List<T>,
     val childrenExtractor: (T) -> List<T>,
-    val labelExtractor: (T) -> String
+    val labelExtractor: (T) -> String,
+    val onClick: (T) -> Unit
 ): RecyclerView.Adapter<RowViewHolder>() {
 
     private val rows = ExpandableRow.createList(data, childrenExtractor)
@@ -58,7 +59,10 @@ class RecursiveExpandableAdapter<T>(
                 }
             )
 
-        val onClick = { if (row.expanded) collapse(row) else expand(row) }
+        val onClick = {
+            if (row.expanded) collapse(row) else expand(row)
+            onClick(data)
+        }
         holder.b.toggleBtn.setOnClickListener { onClick() }
         holder.itemView.setOnClickListener { onClick() }
     }
@@ -80,7 +84,7 @@ class RecursiveExpandableAdapter<T>(
         val nextPosition = position + 1
         var noOfItemsRemoved = 0
 
-        // Iterate and remove while lower level (numerically higher) elements ar found
+        // Iterate and remove while lower level (numerically higher) elements are found
         while (rows[nextPosition].level > row.level) {
             rows.removeAt(nextPosition)
             noOfItemsRemoved++
